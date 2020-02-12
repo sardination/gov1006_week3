@@ -30,7 +30,7 @@ num_M = 18
 num_F = 18
 table_size = 4
 
-sample_no <- 1000
+sample_no <- 10000
 test_results <- c()
 for (i in 1:sample_no) {
   test_results <- test_results %>% 
@@ -39,8 +39,31 @@ for (i in 1:sample_no) {
 
 num_tables <- (num_M + num_F) / table_size
 
-ggplot() + aes(test_results / num_tables) + geom_histogram(colour="black", fill="white")
+ggplot() + aes(test_results) + geom_histogram(colour="black", fill="white") +
+  labs(title = "Number of 100% one gender tables", x = "Number of clumps", y = "Count")
 
 avg_overall_clumps <- sum(test_results) / (sample_no)
 avg_overall_rate <- avg_overall_clumps / num_tables
 ```
+
+```{r}
+# create the null world - 30 seats, 1000 simulations
+
+
+num_M = 18
+num_F = 18
+table_size = 4
+
+members <- rep(c("M", "F"), c(num_M, num_F))
+
+df <- tibble(replication = 1:1000,
+             cols = map(1:1000, ~ sample(members)))
+
+
+
+
+  
+random_assignment <- sample(members)
+  table_assignments <- split(random_assignment, ceiling(seq_along(random_assignment)/table_size))
+```
+

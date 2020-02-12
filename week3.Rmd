@@ -1,0 +1,40 @@
+---
+title: "week3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+
+```{r}
+sample_average_clumps <- function(num_M, num_F, table_size) {
+  members <- rep(c("M", "F"), c(num_M, num_F))
+  
+  random_assignment <- sample(members)
+  table_assignments <- split(random_assignment, ceiling(seq_along(random_assignment)/table_size))
+  
+  total_clumps <- 0
+  for (table in table_assignments) {
+    if (length(unique(table)) == 1) {
+      total_clumps <- total_clumps + 1
+    }
+  }
+  
+  #avg_clumps <- total_clumps / length(table_assignments) 
+  total_clumps
+}
+
+num_M = 18
+num_F = 18
+table_size = 4
+
+test_results <- c()
+for (i in 1:1000) {
+  test_results <- test_results %>% 
+    append(sample_average_clumps(num_M, num_F, table_size))
+}
+
+ggplot() + aes(test_results)+ geom_histogram(colour="black", fill="white")
+```
